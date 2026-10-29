@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "archived_at": "2026-10-29T04:13:32.126Z",
+  "source": {
+    "system": "ClickUp",
+    "task_id": "86bct36c8",
+    "custom_id": null,
+    "url": "https://app.clickup.com/t/86bct36c8",
+    "webhook_id": "manual",
+    "history_id": "40816528532",
+    "triggering_event": "manualArchive"
+  },
+  "task": {
+    "name": "Epic: Define AI Teammate architecture",
+    "description": "",
+    "text_content": "",
+    "status": {
+      "name": "to do",
+      "type": "open",
+      "color": "#d3d3d3"
+    },
+    "priority": null,
+    "date_created": "1793108380508",
+    "date_updated": "1793108380508",
+    "start_date": null,
+    "due_date": null,
+    "parent": null,
+    "list": {
+      "id": "901422682059",
+      "name": "List 1: Product & Architecture"
+    },
+    "folder": {
+      "id": "901414754832",
+      "name": "AI Teammate"
+    },
+    "space": {
+      "id": "90149489975"
+    },
+    "tags": [],
+    "assignees": [],
+    "dependencies": [],
+    "custom_fields": []
+  },
+  "content_sha256": "12abf7d960f26cac6fe599ccc27e47753356c983bc2ca0e53e206649497aed2c"
+}
