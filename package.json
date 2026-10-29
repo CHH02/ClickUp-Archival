@@ -1,0 +1,8 @@
+{
+  "name": "ClickUp-Archival",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "archive-task": "node scripts/archive-task.mjs"
+  }
+}
