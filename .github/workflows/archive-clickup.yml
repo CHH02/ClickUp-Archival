@@ -1,0 +1,88 @@
+name: Archive ClickUp change
+
+on:
+  repository_dispatch:
+    types:
+      - clickup-task-change
+
+  workflow_dispatch:
+    inputs:
+      task_id:
+        description: ClickUp task ID to archive
+        required: true
+        type: string
+      event_type:
+        description: Reason for the manual archive
+        required: false
+        default: manualArchive
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: clickup-archive-${{ github.event.client_payload.task_id || inputs.task_id }}
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out archive repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set event variables
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "CLICKUP_TASK_ID=${{ github.event.client_payload.task_id }}" >> "$GITHUB_ENV"
+            echo "CLICKUP_EVENT_TYPE=${{ github.event.client_payload.event_type }}" >> "$GITHUB_ENV"
+            echo "CLICKUP_WEBHOOK_ID=${{ github.event.client_payload.webhook_id }}" >> "$GITHUB_ENV"
+            echo "CLICKUP_HISTORY_ID=${{ github.event.client_payload.history_id }}" >> "$GITHUB_ENV"
+          else
+            echo "CLICKUP_TASK_ID=${{ inputs.task_id }}" >> "$GITHUB_ENV"
+            echo "CLICKUP_EVENT_TYPE=${{ inputs.event_type }}" >> "$GITHUB_ENV"
+            echo "CLICKUP_WEBHOOK_ID=manual" >> "$GITHUB_ENV"
+            echo "CLICKUP_HISTORY_ID=${{ github.run_id }}" >> "$GITHUB_ENV"
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Archive authoritative ClickUp task
+        env:
+          CLICKUP_API_TOKEN: ${{ secrets.CLICKUP_API_TOKEN }}
+        run: node scripts/archive-task.mjs
+
+      - name: Commit changed archive files
+        shell: bash
+        run: |
+          git config user.name "clickup-archive-bot"
+          git config user.email "clickup-archive-bot@users.noreply.github.com"
+
+          git add archive/
+
+          if git diff --cached --quiet; then
+            echo "No archive changes detected."
+            exit 0
+          fi
+
+          git commit -m "archive: ClickUp ${CLICKUP_EVENT_TYPE} task ${CLICKUP_TASK_ID}"
+
+          for attempt in 1 2 3; do
+            git pull --rebase origin "$GITHUB_REF_NAME"
+
+            if git push origin "HEAD:$GITHUB_REF_NAME"; then
+              exit 0
+            fi
+
+            sleep $((attempt * 5))
+          done
+
+          echo "Unable to push archive after three attempts."
+          exit 1
