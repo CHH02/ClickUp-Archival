@@ -1,0 +1,211 @@
+name: Archive ClickUp Space
+
+on:
+  schedule:
+    # Runs every weekday at 22:30 UTC.
+    # Approximately 5:30 PM CDT.
+    - cron: "30 22 * * 1-5"
+
+  workflow_dispatch:
+    inputs:
+      space_id:
+        description: "ClickUp Space ID. Leave blank to use the CLICKUP_SPACE_ID repository variable."
+        required: false
+        type: string
+
+      checkpoint_label:
+        description: "Optional description for this manual checkpoint."
+        required: false
+        type: string
+
+      include_archived:
+        description: "Include archived Folders, Lists, and tasks."
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: clickup-space-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    name: Snapshot ClickUp Space
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    env:
+      CLICKUP_API_TOKEN: ${{ secrets.CLICKUP_API_TOKEN }}
+      DEFAULT_CLICKUP_SPACE_ID: ${{ vars.CLICKUP_SPACE_ID }}
+
+      CLICKUP_INCLUDE_CLOSED: "true"
+      CLICKUP_INCLUDE_SUBTASKS: "true"
+      CLICKUP_MAX_RETRIES: "4"
+      CLICKUP_REQUEST_DELAY_MS: "125"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Resolve archive configuration
+        shell: bash
+        env:
+          MANUAL_SPACE_ID: ${{ inputs.space_id }}
+          MANUAL_INCLUDE_ARCHIVED: ${{ inputs.include_archived }}
+          MANUAL_CHECKPOINT_LABEL: ${{ inputs.checkpoint_label }}
+        run: |
+          if [ -n "$MANUAL_SPACE_ID" ]; then
+            RESOLVED_SPACE_ID="$MANUAL_SPACE_ID"
+          else
+            RESOLVED_SPACE_ID="$DEFAULT_CLICKUP_SPACE_ID"
+          fi
+
+          if [ -z "$RESOLVED_SPACE_ID" ]; then
+            echo "No ClickUp Space ID was supplied."
+            echo "Create the CLICKUP_SPACE_ID repository variable or enter a Space ID manually."
+            exit 1
+          fi
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            ARCHIVE_TRIGGER="manual"
+            INCLUDE_ARCHIVED="${MANUAL_INCLUDE_ARCHIVED:-false}"
+          else
+            ARCHIVE_TRIGGER="schedule"
+            INCLUDE_ARCHIVED="false"
+          fi
+
+          SAFE_LABEL=$(printf '%s' "$MANUAL_CHECKPOINT_LABEL" \
+            | tr '\n\r' '  ' \
+            | tr -cd '[:alnum:] _.,()-' \
+            | cut -c1-80)
+
+          echo "CLICKUP_SPACE_ID=$RESOLVED_SPACE_ID" >> "$GITHUB_ENV"
+          echo "CLICKUP_INCLUDE_ARCHIVED=$INCLUDE_ARCHIVED" >> "$GITHUB_ENV"
+          echo "ARCHIVE_TRIGGER=$ARCHIVE_TRIGGER" >> "$GITHUB_ENV"
+          echo "CHECKPOINT_LABEL=$SAFE_LABEL" >> "$GITHUB_ENV"
+
+      - name: Verify ClickUp credentials
+        shell: bash
+        run: |
+          STATUS=$(curl \
+            --silent \
+            --show-error \
+            --output /tmp/clickup-workspaces.json \
+            --write-out "%{http_code}" \
+            --request GET \
+            --url "https://api.clickup.com/api/v2/team" \
+            --header "Authorization: $CLICKUP_API_TOKEN")
+
+          echo "ClickUp authentication HTTP status: $STATUS"
+
+          if [ "$STATUS" != "200" ]; then
+            echo "ClickUp authentication failed."
+            cat /tmp/clickup-workspaces.json
+            exit 1
+          fi
+
+          node -e '
+            const fs = require("fs");
+
+            const response = JSON.parse(
+              fs.readFileSync(
+                "/tmp/clickup-workspaces.json",
+                "utf8"
+              )
+            );
+
+            console.log("Authorized ClickUp Workspaces:");
+
+            for (const workspace of response.teams ?? []) {
+              console.log(
+                `- ${workspace.name} (${workspace.id})`
+              );
+            }
+          '
+
+      - name: Archive ClickUp Space
+        run: node scripts/archive-space.mjs
+
+      - name: Display audit report
+        if: always()
+        shell: bash
+        run: |
+          if [ -f ".audit/last-run.json" ]; then
+            cat ".audit/last-run.json"
+          else
+            echo "No audit report was produced."
+          fi
+
+      - name: Stage archive changes
+        id: archive_changes
+        shell: bash
+        run: |
+          git add archive/
+
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No ClickUp changes were detected."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "ClickUp archive changes were detected."
+            git diff --cached --stat
+          fi
+
+      - name: Commit archive changes
+        if: steps.archive_changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          git config user.name "clickup-archive-bot"
+          git config user.email "clickup-archive-bot@users.noreply.github.com"
+
+          if [ -n "$CHECKPOINT_LABEL" ]; then
+            COMMIT_MESSAGE="archive: Space $CLICKUP_SPACE_ID - $CHECKPOINT_LABEL"
+          else
+            COMMIT_MESSAGE="archive: Space $CLICKUP_SPACE_ID ($ARCHIVE_TRIGGER)"
+          fi
+
+          git commit -m "$COMMIT_MESSAGE"
+
+      - name: Push archive commit
+        if: steps.archive_changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          BRANCH="$GITHUB_REF_NAME"
+
+          if [ -z "$BRANCH" ]; then
+            BRANCH="${{ github.event.repository.default_branch }}"
+          fi
+
+          for ATTEMPT in 1 2 3; do
+            echo "Push attempt $ATTEMPT"
+
+            if git pull --rebase origin "$BRANCH" \
+              && git push origin "HEAD:$BRANCH"; then
+              echo "Archive commit pushed successfully."
+              exit 0
+            fi
+
+            sleep $((ATTEMPT * 5))
+          done
+
+          echo "Unable to push after three attempts."
+          exit 1
+
+      - name: Upload audit diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clickup-audit-${{ github.run_id }}
+          path: .audit/
+          if-no-files-found: ignore
+          retention-days: 30

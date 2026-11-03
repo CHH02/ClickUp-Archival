@@ -1,8 +1,14 @@
 {
-  "name": "ClickUp-Archival",
+  "name": "clickup-hierarchy-archival",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
+  "description": "Versioned ClickUp Space hierarchy archival through GitHub Actions.",
   "scripts": {
-    "archive-task": "node scripts/archive-task.mjs"
+    "archive": "node scripts/archive-space.mjs",
+    "check": "node --check scripts/archive-space.mjs && node --check scripts/lib/clickup-client.mjs && node --check scripts/lib/normalize.mjs && node --check scripts/lib/utilities.mjs"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
