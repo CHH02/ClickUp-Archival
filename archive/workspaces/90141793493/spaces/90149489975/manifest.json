@@ -1,0 +1,27 @@
+{
+  "content_sha256": "85d17adeeb4f656db7b178c14d281247f8bb29edea6350d53464e1b7264caebd",
+  "counts": {
+    "folderless_lists": 1,
+    "lists": 9,
+    "subfolders": 0,
+    "subtasks": 123,
+    "tasks": 19,
+    "top_level_folders": 1
+  },
+  "schema_version": "1.0",
+  "scope": "space",
+  "settings": {
+    "include_archived": false,
+    "include_closed": true,
+    "include_subtasks": true
+  },
+  "space": {
+    "id": "90149489975",
+    "name": "Space"
+  },
+  "warnings": [],
+  "workspace": {
+    "id": "90141793493",
+    "name": "Clay's Workspace"
+  }
+}

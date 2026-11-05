@@ -1,0 +1,116 @@
+{
+  "archived": false,
+  "features": {
+    "check_unresolved": {
+      "checklists": null,
+      "comments": null,
+      "enabled": true,
+      "subtasks": true
+    },
+    "custom_fields": {
+      "enabled": true
+    },
+    "custom_items": {
+      "enabled": false
+    },
+    "dependency_type_enabled": false,
+    "due_dates": {
+      "enabled": true,
+      "remap_closed_due_date": false,
+      "remap_due_dates": false,
+      "start_date": true
+    },
+    "milestones": {
+      "enabled": true
+    },
+    "multiple_assignees": {
+      "enabled": true
+    },
+    "points": {
+      "enabled": false
+    },
+    "priorities": {
+      "enabled": true,
+      "priorities": [
+        {
+          "color": "#f50000",
+          "id": "1",
+          "orderindex": "1",
+          "priority": "urgent"
+        },
+        {
+          "color": "#f8ae00",
+          "id": "2",
+          "orderindex": "2",
+          "priority": "high"
+        },
+        {
+          "color": "#6fddff",
+          "id": "3",
+          "orderindex": "3",
+          "priority": "normal"
+        },
+        {
+          "color": "#d8d8d8",
+          "id": "4",
+          "orderindex": "4",
+          "priority": "low"
+        }
+      ]
+    },
+    "remap_dependency_settings": {
+      "enabled": true,
+      "enforcement_mode": 2,
+      "reschedule_closed_dependencies": true
+    },
+    "reschedule_closed_dependencies": {
+      "enabled": true
+    },
+    "scheduler_enabled": false,
+    "sprints": {
+      "enabled": true
+    },
+    "status_pies": {
+      "enabled": false
+    },
+    "tags": {
+      "enabled": true
+    },
+    "time_tracking": {
+      "default_to_billable": 2,
+      "enabled": true,
+      "harvest": false,
+      "rollup": true
+    }
+  },
+  "id": "90149489975",
+  "multiple_assignees": true,
+  "name": "Space",
+  "object_type": "space",
+  "private": false,
+  "schema_version": "1.0",
+  "statuses": [
+    {
+      "color": "#d3d3d3",
+      "id": "p90149489975_pWwVLBst",
+      "name": "to do",
+      "order_index": 0,
+      "type": "open"
+    },
+    {
+      "color": "#6647f0",
+      "id": "p90149489975_SoUsgJgn",
+      "name": "in progress",
+      "order_index": 1,
+      "type": "custom"
+    },
+    {
+      "color": "#008844",
+      "id": "p90149489975_tQ8q0Ja9",
+      "name": "complete",
+      "order_index": 2,
+      "type": "closed"
+    }
+  ],
+  "workspace_id": "90141793493"
+}

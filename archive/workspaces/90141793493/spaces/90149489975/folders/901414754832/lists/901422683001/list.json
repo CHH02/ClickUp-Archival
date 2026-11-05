@@ -1,0 +1,41 @@
+{
+  "archived": false,
+  "assignee": null,
+  "content": "",
+  "due_date": null,
+  "due_date_time": null,
+  "folder_id": "901414754832",
+  "id": "901422683001",
+  "name": "List 8: Documentation & Deployment",
+  "object_type": "list",
+  "priority": null,
+  "schema_version": "1.0",
+  "space_id": "90149489975",
+  "start_date": null,
+  "start_date_time": null,
+  "status": null,
+  "statuses": [
+    {
+      "color": "#d3d3d3",
+      "id": "p90149489975_pWwVLBst",
+      "name": "to do",
+      "order_index": 0,
+      "type": "open"
+    },
+    {
+      "color": "#6647f0",
+      "id": "p90149489975_SoUsgJgn",
+      "name": "in progress",
+      "order_index": 1,
+      "type": "custom"
+    },
+    {
+      "color": "#008844",
+      "id": "p90149489975_tQ8q0Ja9",
+      "name": "complete",
+      "order_index": 2,
+      "type": "closed"
+    }
+  ],
+  "workspace_id": "90141793493"
+}

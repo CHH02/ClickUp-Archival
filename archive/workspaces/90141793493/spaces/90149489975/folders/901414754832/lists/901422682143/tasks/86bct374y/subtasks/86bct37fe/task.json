@@ -1,0 +1,48 @@
+{
+  "archived": false,
+  "assignees": [],
+  "attachments": [],
+  "checklists": [],
+  "custom_fields": [],
+  "custom_id": null,
+  "date_closed": null,
+  "date_created": "1793108520686",
+  "date_done": null,
+  "date_updated": "1793108520686",
+  "dependencies": [],
+  "description": "",
+  "due_date": null,
+  "folder_id": "901414754832",
+  "id": "86bct37fe",
+  "linked_tasks": [],
+  "list_id": "901422682143",
+  "name": "Generate meeting summary",
+  "object_type": "subtask",
+  "parent_task_id": "86bct374y",
+  "priority": null,
+  "schema_version": "1.0",
+  "source_url": "https://app.clickup.com/t/86bct37fe",
+  "space_id": "90149489975",
+  "start_date": null,
+  "status": {
+    "color": "#d3d3d3",
+    "id": "p90149489975_pWwVLBst",
+    "name": "to do",
+    "order_index": 0,
+    "type": "open"
+  },
+  "tags": [],
+  "text_content": "",
+  "time_estimate": null,
+  "time_spent": null,
+  "watchers": [
+    {
+      "email": "clayhop901@gmail.com",
+      "id": "252010917",
+      "initials": "C",
+      "role": null,
+      "username": "Clay"
+    }
+  ],
+  "workspace_id": "90141793493"
+}

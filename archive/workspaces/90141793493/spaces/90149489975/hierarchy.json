@@ -1,0 +1,26 @@
+{
+  "folderless_lists": [
+    {
+      "id": "901422534186",
+      "name": "Full Stack Open Tracker"
+    }
+  ],
+  "folders": [
+    {
+      "id": "901414754832",
+      "name": "AI Teammate",
+      "parent_folder_id": null,
+      "subfolders": []
+    }
+  ],
+  "orphaned_folders": [],
+  "schema_version": "1.0",
+  "space": {
+    "id": "90149489975",
+    "name": "Space"
+  },
+  "workspace": {
+    "id": "90141793493",
+    "name": "Clay's Workspace"
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "archived": false,
+  "assignees": [],
+  "attachments": [],
+  "checklists": [],
+  "custom_fields": [
+    {
+      "id": "03afdc41-bde1-4288-92e7-47814061cf63",
+      "name": "Project Summary",
+      "type": "text",
+      "type_config": {
+        "ai": {
+          "prompt": "Summarize the exercise requirements and current progress based on the task description and comments.",
+          "source": "summary"
+        }
+      },
+      "value": null
+    },
+    {
+      "id": "0bd8674c-256e-4b21-9096-85eaeaf787ec",
+      "name": "Exercise Number",
+      "type": "short_text",
+      "type_config": {},
+      "value": null
+    },
+    {
+      "id": "4a79c28b-b855-4f7b-a2f7-f596ff09d8ab",
+      "name": "Tech Stack",
+      "type": "labels",
+      "type_config": {
+        "options": [
+          {
+            "color": "#61DAFB",
+            "id": "7384aefa-3060-4328-b866-b940f00ca362",
+            "label": "React",
+            "orderindex": 0
+          },
+          {
+            "color": "#5A29E4",
+            "id": "c718b536-1eb1-448f-80a9-fd4ca94168cb",
+            "label": "Axios",
+            "orderindex": 1
+          },
+          {
+            "color": "#264DE4",
+            "id": "2b03ec6e-691d-4cfa-9da1-85bb7e4dec06",
+            "label": "CSS",
+            "orderindex": 2
+          },
+          {
+            "color": "#339933",
+            "id": "ba2a6813-3b37-4053-996b-aaf011803ca4",
+            "label": "Node.js",
+            "orderindex": 3
+          },
+          {
+            "color": "#555555",
+            "id": "fc2547c2-e6ea-453b-9edc-e2eb6fcb8d62",
+            "label": "Express",
+            "orderindex": 4
+          },
+          {
+            "color": "#47A248",
+            "id": "c82210d2-0773-4c8e-bb90-7e8c4be46a54",
+            "label": "MongoDB",
+            "orderindex": 5
+          },
+          {
+            "color": "#764ABC",
+            "id": "0ede39aa-ed6a-4240-a65b-95f9ed79fd0d",
+            "label": "Redux",
+            "orderindex": 6
+          },
+          {
+            "color": "#3178C6",
+            "id": "3ceea005-0811-4e83-8b5f-c96d7e7d4b4c",
+            "label": "TypeScript",
+            "orderindex": 7
+          },
+          {
+            "color": "#E10098",
+            "id": "c562cee1-7e38-473b-83e5-1210f1b7cf43",
+            "label": "GraphQL",
+            "orderindex": 8
+          },
+          {
+            "color": "#2496ED",
+            "id": "593e6180-1c8a-4d01-b8a7-b8460abf020d",
+            "label": "Docker",
+            "orderindex": 9
+          },
+          {
+            "color": "#6B7280",
+            "id": "17e917de-e62a-4ca8-9096-daeb264edaad",
+            "label": "CI/CD",
+            "orderindex": 10
+          },
+          {
+            "color": "#16A34A",
+            "id": "63952b09-c809-4118-ba2b-4d203d047a0b",
+            "label": "Testing",
+            "orderindex": 11
+          }
+        ],
+        "sorting": "manual"
+      },
+      "value": null
+    },
+    {
+      "id": "7df296fe-37d0-406a-b19b-7e1cc26aaf04",
+      "name": "Live Demo URL",
+      "type": "url",
+      "type_config": {},
+      "value": null
+    },
+    {
+      "id": "b3891dfa-82e2-49f1-bb76-fb51aca0a1cd",
+      "name": "Course Part",
+      "type": "drop_down",
+      "type_config": {
+        "options": [
+          {
+            "color": "#6B7280",
+            "id": "14011bbd-0008-4094-9afe-820acaf3da09",
+            "name": "Part 0",
+            "orderindex": 0
+          },
+          {
+            "color": "#EF4444",
+            "id": "6d0dc97c-102e-47ae-91b5-c091b9efc9b0",
+            "name": "Part 1",
+            "orderindex": 1
+          },
+          {
+            "color": "#F97316",
+            "id": "ef05e677-c413-455b-8635-168e75439a61",
+            "name": "Part 2",
+            "orderindex": 2
+          },
+          {
+            "color": "#EAB308",
+            "id": "99c7cf55-db96-4061-bb9e-0d7c194f630c",
+            "name": "Part 3",
+            "orderindex": 3
+          },
+          {
+            "color": "#22C55E",
+            "id": "8ab8f51a-9d2e-47e2-bb01-7bd59872d707",
+            "name": "Part 4",
+            "orderindex": 4
+          },
+          {
+            "color": "#14B8A6",
+            "id": "478c643f-89a2-40e3-99df-463d44ed9306",
+            "name": "Part 5",
+            "orderindex": 5
+          },
+          {
+            "color": "#06B6D4",
+            "id": "cb1d10ce-d195-43e6-b16f-9397d702c66e",
+            "name": "Part 6",
+            "orderindex": 6
+          },
+          {
+            "color": "#3B82F6",
+            "id": "6b3f29ea-ce21-4461-b777-56f39d5e9a78",
+            "name": "Part 7",
+            "orderindex": 7
+          },
+          {
+            "color": "#6366F1",
+            "id": "441349e3-8414-44f7-bf9e-f282753d9d37",
+            "name": "Part 8",
+            "orderindex": 8
+          },
+          {
+            "color": "#8B5CF6",
+            "id": "f3abf764-6275-4b67-aaea-35082cf38bd4",
+            "name": "Part 9",
+            "orderindex": 9
+          },
+          {
+            "color": "#A855F7",
+            "id": "083e50cc-bb70-4eee-9088-ded3b0a21505",
+            "name": "Part 10",
+            "orderindex": 10
+          },
+          {
+            "color": "#D946EF",
+            "id": "33b4fc82-9def-425e-88f7-c4a00f011305",
+            "name": "Part 11",
+            "orderindex": 11
+          },
+          {
+            "color": "#EC4899",
+            "id": "efe06d9a-b6a5-4d27-b815-b8af8f07bece",
+            "name": "Part 12",
+            "orderindex": 12
+          }
+        ],
+        "sorting": "manual"
+      },
+      "value": null
+    },
+    {
+      "id": "c5775b4a-c2b6-42a0-b55c-ec83b9d6fd7f",
+      "name": "GitHub Link",
+      "type": "url",
+      "type_config": {},
+      "value": null
+    }
+  ],
+  "custom_id": null,
+  "date_closed": null,
+  "date_created": "1792674867144",
+  "date_done": "1792674867144",
+  "date_updated": "1792674867144",
+  "dependencies": [],
+  "description": "",
+  "due_date": null,
+  "folder_id": null,
+  "id": "86bcpke20",
+  "linked_tasks": [],
+  "list_id": "901422534186",
+  "name": "3.12: Command-line database",
+  "object_type": "subtask",
+  "parent_task_id": "86bcpke1v",
+  "priority": null,
+  "schema_version": "1.0",
+  "source_url": "https://app.clickup.com/t/86bcpke20",
+  "space_id": "90149489975",
+  "start_date": null,
+  "status": {
+    "color": "#6bc950",
+    "id": "sc901422534186_VHexm3VX",
+    "name": "done",
+    "order_index": 4,
+    "type": "done"
+  },
+  "tags": [],
+  "text_content": "",
+  "time_estimate": null,
+  "time_spent": null,
+  "watchers": [
+    {
+      "email": "clayhop901@gmail.com",
+      "id": "252010917",
+      "initials": "C",
+      "role": null,
+      "username": "Clay"
+    }
+  ],
+  "workspace_id": "90141793493"
+}
