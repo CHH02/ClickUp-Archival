@@ -123,6 +123,20 @@ export class ClickUpClient {
     return response.teams ?? [];
   }
 
+  async getSpaces(
+    workspaceId,
+    { archived = false } = {}
+  ) {
+    const response = await this.request(
+      `/team/${encodeURIComponent(workspaceId)}/space`,
+      {
+        archived
+      }
+    );
+
+    return response.spaces ?? [];
+  }
+
   async getSpace(spaceId) {
     return this.request(
       `/space/${encodeURIComponent(spaceId)}`

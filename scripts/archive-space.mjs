@@ -135,28 +135,78 @@ try {
   statistics.workspaces =
     workspaces.length;
 
+  if (workspaces.length === 0) {
+    throw new Error(
+      "The authenticated ClickUp token has access to zero Workspaces."
+    );
+  }
+
+  /*
+   * Determine which authorized Workspace contains the
+   * requested Space. GET /space/{space_id} does not
+   * necessarily provide the Workspace ID, so discover
+   * the relationship through each authorized Workspace.
+   */
+  let workspace = null;
+  let discoveredSpace = null;
+
+  for (const candidateWorkspace of workspaces) {
+    const candidateWorkspaceId =
+      String(candidateWorkspace.id);
+
+    console.log(
+      `Searching Workspace ${candidateWorkspace.name} (${candidateWorkspaceId}) for Space ${spaceId}...`
+    );
+
+    const spaces =
+      await client.getSpaces(
+        candidateWorkspaceId,
+        {
+          archived: true
+        }
+      );
+
+    const match = spaces.find(
+      candidateSpace =>
+        String(candidateSpace.id) ===
+        String(spaceId)
+    );
+
+    if (match) {
+      workspace = candidateWorkspace;
+      discoveredSpace = match;
+      break;
+    }
+  }
+
+  if (!workspace) {
+    throw new Error(
+      [
+        `Space ${spaceId} was not found in any`,
+        `Workspace authorized for this ClickUp token.`
+      ].join(" ")
+    );
+  }
+
+  const workspaceId =
+    String(workspace.id);
+
+  /*
+   * Retrieve the full Space object after establishing
+   * its parent Workspace.
+   */
   const space =
     await client.getSpace(spaceId);
 
   statistics.spaces = 1;
 
-  const workspaceId =
-    String(space.team_id);
-
-  const workspace = workspaces.find(
-    item =>
-      String(item.id) === workspaceId
+  console.log(
+    `Found Space ${space.name ?? discoveredSpace.name} (${spaceId})`
   );
 
-  if (!workspace) {
-    throw new Error(
-      [
-        `Space ${spaceId} belongs to Workspace`,
-        `${workspaceId}, but that Workspace was not`,
-        `returned by the authenticated token.`
-      ].join(" ")
-    );
-  }
+  console.log(
+    `Parent Workspace: ${workspace.name} (${workspaceId})`
+  );
 
   const workspaceTemporaryPath =
     path.join(
@@ -1031,7 +1081,7 @@ function validateSnapshot({
 
   if (
     statistics.tasks +
-      statistics.subtasks !==
+    statistics.subtasks !==
     seenTaskIds.size
   ) {
     throw new Error(
