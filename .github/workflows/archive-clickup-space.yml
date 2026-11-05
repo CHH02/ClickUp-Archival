@@ -133,6 +133,53 @@ jobs:
             }
           '
 
+      - name: Discover ClickUp Spaces
+        shell: bash
+        run: |
+          echo "Retrieving Spaces from Workspace 90141793493..."
+
+          STATUS=$(curl \
+            --silent \
+            --show-error \
+            --output /tmp/clickup-spaces.json \
+            --write-out "%{http_code}" \
+            --request GET \
+            --url "https://api.clickup.com/api/v2/team/90141793493/space?archived=false" \
+            --header "Authorization: $CLICKUP_API_TOKEN")
+
+          echo "ClickUp Spaces HTTP status: $STATUS"
+
+          if [ "$STATUS" != "200" ]; then
+            echo "Unable to retrieve Spaces."
+            cat /tmp/clickup-spaces.json
+            exit 1
+          fi
+
+          node -e '
+            const fs = require("fs");
+
+            const data = JSON.parse(
+              fs.readFileSync(
+                "/tmp/clickup-spaces.json",
+                "utf8"
+              )
+            );
+
+            console.log("");
+            console.log("Spaces returned by ClickUp:");
+
+            for (const space of data.spaces ?? []) {
+              console.log(
+                `- ${space.name} | ID: ${space.id} | archived: ${space.archived ?? false}`
+              );
+            }
+
+            console.log("");
+            console.log(
+              `Total Spaces: ${(data.spaces ?? []).length}`
+            );
+          '
+
       - name: Archive ClickUp Space
         run: node scripts/archive-space.mjs
 
