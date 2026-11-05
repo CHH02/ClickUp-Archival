@@ -158,19 +158,45 @@ try {
       `Searching Workspace ${candidateWorkspace.name} (${candidateWorkspaceId}) for Space ${spaceId}...`
     );
 
-    const spaces =
+    /*
+     * Search active Spaces first.
+     * ClickUp's archived parameter is a filter, so
+     * archived=false is required for normal active Spaces.
+     */
+    const activeSpaces =
       await client.getSpaces(
         candidateWorkspaceId,
         {
-          archived: true
+          archived: false
         }
       );
 
-    const match = spaces.find(
+    let match = activeSpaces.find(
       candidateSpace =>
         String(candidateSpace.id) ===
         String(spaceId)
     );
+
+    /*
+     * If CLICKUP_INCLUDE_ARCHIVED=true and the Space
+     * was not found among active Spaces, search archived
+     * Spaces as well.
+     */
+    if (!match && includeArchived) {
+      const archivedSpaces =
+        await client.getSpaces(
+          candidateWorkspaceId,
+          {
+            archived: true
+          }
+        );
+
+      match = archivedSpaces.find(
+        candidateSpace =>
+          String(candidateSpace.id) ===
+          String(spaceId)
+      );
+    }
 
     if (match) {
       workspace = candidateWorkspace;
@@ -179,7 +205,7 @@ try {
     }
   }
 
-  if (!workspace) {
+  if (!workspace || !discoveredSpace) {
     throw new Error(
       [
         `Space ${spaceId} was not found in any`,
